@@ -67,6 +67,7 @@ function Chat({ onLogout, onToast }) {
     const [replyTo, setReplyTo] = useState(null);
     const [typingMap, setTypingMap] = useState({});
     const [showProfile, setShowProfile] = useState(false);
+    const [mobileShowChat, setMobileShowChat] = useState(false);
     const [darkMode, setDarkMode] = useState(() => {
         return (localStorage.getItem("cc-theme") || document.documentElement.getAttribute("data-theme")) === "dark";
     });
@@ -102,36 +103,21 @@ function Chat({ onLogout, onToast }) {
         }
     }, [selectedId]);
 
-    // ── Mobile detection ──
-    const isMobile = () => window.innerWidth <= 768;
-
     // ── Select Contact ──
     function selectContact(id) {
         setSelectedId(id);
         setReplyTo(null);
+        setMobileShowChat(true);
 
         // Clear unread count
         setContacts((prev) =>
             prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c))
         );
-
-        // Mobile: Show chat area, hide sidebar
-        if (isMobile()) {
-            const sidebar = document.getElementById("sidebar-wrapper");
-            const chatArea = document.getElementById("main-chat-area");
-            if (sidebar) sidebar.classList.add("hidden-on-mobile");
-            if (chatArea) chatArea.classList.add("show-on-mobile");
-        }
     }
 
     // ── Back to list on Mobile ──
     function goBackToList() {
-        if (isMobile()) {
-            const sidebar = document.getElementById("sidebar-wrapper");
-            const chatArea = document.getElementById("main-chat-area");
-            if (sidebar) sidebar.classList.remove("hidden-on-mobile");
-            if (chatArea) chatArea.classList.remove("show-on-mobile");
-        }
+        setMobileShowChat(false);
     }
 
     // ── Send Message ──
@@ -381,10 +367,11 @@ function Chat({ onLogout, onToast }) {
                 onNewChat={() => setNewChatOpen(true)}
                 filter={filter}
                 onFilterChange={setFilter}
+                hiddenOnMobile={mobileShowChat}
             />
 
             {/* ── Main Chat Area (Pure White) ── */}
-            <main className="main-chat-area" id="main-chat-area">
+            <main className={`main-chat-area ${mobileShowChat ? "show-on-mobile" : ""}`} id="main-chat-area">
                 {selectedContact ? (
                     <>
                         {/* Pure White Chat Header */}

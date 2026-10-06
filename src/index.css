@@ -584,13 +584,16 @@ button:focus-visible {
 .otp-boxes-row {
     display: flex;
     gap: 8px;
-    justify-content: space-between;
+    justify-content: center;
     margin: 22px 0 16px;
+    width: 100%;
 }
 
 .otp-digit-box {
-    width: 48px;
-    height: 52px;
+    flex: 1;
+    min-width: 0;
+    max-width: 48px;
+    height: 50px;
     text-align: center;
     font-size: 20px;
     font-weight: 700;
@@ -599,6 +602,7 @@ button:focus-visible {
     outline: none;
     background: #f8fafc;
     transition: all 0.15s ease;
+    padding: 0;
 }
 
 .otp-digit-box:focus {
@@ -777,6 +781,8 @@ button:focus-visible {
 
 .panel-header {
     height: 60px;
+    min-height: 60px;
+    flex-shrink: 0;
     padding: 0 16px;
     display: flex;
     align-items: center;
@@ -815,6 +821,7 @@ button:focus-visible {
 
 .panel-search-bar {
     padding: 0 16px 10px;
+    flex-shrink: 0;
 }
 
 .search-input-wrap {
@@ -856,6 +863,7 @@ button:focus-visible {
     display: flex;
     gap: 6px;
     padding: 0 16px 10px;
+    flex-shrink: 0;
 }
 
 .filter-chip {
@@ -890,8 +898,12 @@ button:focus-visible {
 
 .panel-scroll-content {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
 }
 
 .chat-section-group {
@@ -1322,6 +1334,8 @@ button:focus-visible {
 .main-chat-area {
     flex: 1;
     height: 100%;
+    min-height: 0;
+    max-height: 100%;
     background-color: var(--bg-main);
     display: flex;
     flex-direction: column;
@@ -1333,13 +1347,17 @@ button:focus-visible {
 .chat-header-bar {
     height: 62px;
     min-height: 62px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    width: 100%;
     background-color: var(--bg-main);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
-    z-index: 10;
+    z-index: 50;
 }
 
 .header-left-col {
@@ -1351,13 +1369,16 @@ button:focus-visible {
 
 .header-back-btn {
     display: none;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     color: var(--text-primary);
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    background: transparent;
+    border: none;
+    flex-shrink: 0;
 }
 
 .header-avatar-wrap {
@@ -1453,6 +1474,7 @@ button:focus-visible {
 /* ── Message Area Viewport ── */
 .message-area-viewport {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: var(--bg-main);
@@ -1460,6 +1482,9 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
 }
 
 .message-date-badge {
@@ -1716,7 +1741,9 @@ button:focus-visible {
     border-top: 1px solid var(--border-color);
     position: sticky;
     bottom: 0;
-    z-index: 10;
+    z-index: 40;
+    flex-shrink: 0;
+    width: 100%;
 }
 
 .composer-reply-strip {
@@ -2553,42 +2580,170 @@ button:focus-visible {
    RESPONSIVE DESIGN (320px – 1440px+)
 ───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .nav-rail {
-        display: none;
+    html, body, #root {
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
     }
 
-    .section-panel {
+    .app-shell {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         width: 100%;
-        max-width: 100%;
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .nav-rail {
+        display: none !important;
     }
 
     .sidebar-wrapper {
         width: 100%;
+        height: 100%;
+        min-height: 0;
+        flex: 1;
+        display: flex;
     }
 
     .sidebar-wrapper.hidden-on-mobile {
         display: none !important;
     }
 
+    .section-panel {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: 100%;
+        min-height: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: none;
+    }
+
+    .panel-scroll-content {
+        flex: 1;
+        min-height: 0;
+        height: auto;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior: contain;
+    }
+
     .main-chat-area {
         display: none;
         width: 100%;
+        height: 100%;
+        min-height: 0;
+        max-height: 100%;
+        flex: 1;
+        flex-direction: column;
+        overflow: hidden;
     }
 
     .main-chat-area.show-on-mobile {
         display: flex !important;
     }
 
+    /* Fixed sticky top header on mobile */
+    .chat-header-bar {
+        height: 58px;
+        min-height: 58px;
+        padding: 0 12px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 50;
+        background-color: var(--bg-main);
+    }
+
     .header-back-btn {
-        display: flex;
+        display: flex !important;
+        background: transparent;
+        border: none;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    .header-left-col {
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .header-info-wrap {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .header-contact-name {
+        font-size: 14px;
+    }
+
+    .header-contact-status {
+        font-size: 11px;
+    }
+
+    .header-right-col {
+        flex-shrink: 0;
+        gap: 2px;
+    }
+
+    .message-area-viewport {
+        padding: 10px 12px;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior: contain;
+    }
+
+    .composer-container {
+        flex-shrink: 0;
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        z-index: 40;
     }
 
     .message-content-wrapper {
-        max-width: 82%;
+        max-width: 86%;
     }
 
     .profile-drawer-panel {
         width: 100%;
         z-index: 300;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 24px 18px;
+    }
+
+    .otp-boxes-row {
+        gap: 6px;
+    }
+
+    .otp-digit-box {
+        height: 46px;
+        font-size: 18px;
+    }
+
+    .chat-header-bar {
+        padding: 0 8px;
+    }
+
+    .header-action-btn {
+        width: 30px;
+        height: 30px;
     }
 }

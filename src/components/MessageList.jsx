@@ -27,14 +27,17 @@ function MessageList({
     onForward,
     onToast,
 }) {
+    const viewportRef = useRef(null);
     const bottomRef = useRef(null);
     const [actionAnchor, setActionAnchor] = useState(null);
     const [activeMsgId, setActiveMsgId] = useState(null);
     const [playingVoiceId, setPlayingVoiceId] = useState(null);
 
-    // Auto-scroll to bottom on new message
+    // Auto-scroll to bottom of viewport without scrolling outer window or pushing header off
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (viewportRef.current) {
+            viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
+        }
     }, [messages]);
 
     const handleMenuOpen = (e, msgId) => {
@@ -63,7 +66,7 @@ function MessageList({
     const activeMsg = messages.find((m) => m.id === activeMsgId);
 
     return (
-        <div className="message-area-viewport" id="message-area-viewport">
+        <div className="message-area-viewport" id="message-area-viewport" ref={viewportRef}>
             <div className="message-date-badge">
                 <span>Today</span>
             </div>

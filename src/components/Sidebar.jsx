@@ -48,6 +48,7 @@ function Sidebar({
     onNewChat,
     filter = "all",
     onFilterChange,
+    hiddenOnMobile = false,
 }) {
     const [headerMenuAnchor, setHeaderMenuAnchor] = useState(null);
 
@@ -79,7 +80,7 @@ function Sidebar({
         .sort((a, b) => a.name.localeCompare(b.name));
 
     return (
-        <aside className="sidebar-wrapper" id="sidebar-wrapper">
+        <aside className={`sidebar-wrapper ${hiddenOnMobile ? "hidden-on-mobile" : ""}`} id="sidebar-wrapper">
             {/* ── 1. Compact Left Navigation Rail (64px) ── */}
             <nav className="nav-rail" aria-label="Main Navigation">
                 <div className="nav-rail-top">
